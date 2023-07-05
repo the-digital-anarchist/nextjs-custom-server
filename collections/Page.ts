@@ -12,85 +12,89 @@ import { Type as ContentType } from '../blocks/Content/Component';
 export type Layout = CallToActionType | ContentType | ImageType
 
 export type Type = {
-  title: string
-  slug: string
-  image?: MediaType
-  layout: Layout[]
-  meta: {
-    title?: string
-    description?: string
-    keywords?: string
-  }
+    title: string
+    slug: string
+    image?: MediaType
+    layout: Layout[]
+    meta: {
+        title?: string
+        description?: string
+        keywords?: string
+    }
 }
 
 export const Page: CollectionConfig = {
-  slug: 'pages',
-  admin: {
-    useAsTitle: 'title',
-  },
-  access: {
-    read: (): boolean => true, // Everyone can read Pages
-  },
-  fields: [
-    {
-      name: 'title',
-      label: 'Page Title',
-      type: 'text',
-      required: true,
+    slug: 'pages',
+    admin: {
+        useAsTitle: 'title',
+        hidden: (res) => {
+            console.log('res //> ', res)
+            return true
+        }
     },
-    {
-      name: 'image',
-      label: 'Featured Image',
-      type: 'upload',
-      relationTo: 'media',
+    access: {
+        read: (): boolean => true, // Everyone can read Pages
     },
-    {
-      name: 'layout',
-      label: 'Page Layout',
-      type: 'blocks',
-      minRows: 1,
-      blocks: [
-        CallToAction,
-        Content,
-        Image,
-      ],
-    },
-    {
-      name: 'meta',
-      label: 'Page Meta',
-      type: 'group',
-      fields: [
+    fields: [
         {
-          name: 'title',
-          label: 'Title',
-          type: 'text',
+            name: 'title',
+            label: 'Page Title',
+            type: 'text',
+            required: true,
         },
         {
-          name: 'description',
-          label: 'Description',
-          type: 'textarea',
+            name: 'image',
+            label: 'Featured Image',
+            type: 'upload',
+            relationTo: 'media',
         },
         {
-          name: 'keywords',
-          label: 'Keywords',
-          type: 'text',
+            name: 'layout',
+            label: 'Page Layout',
+            type: 'blocks',
+            minRows: 1,
+            blocks: [
+                CallToAction,
+                Content,
+                Image,
+            ],
         },
-      ],
-    },
-    {
-      name: 'slug',
-      label: 'Page Slug',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-      },
-      hooks: {
-        beforeValidate: [
-          formatSlug('title'),
-        ],
-      },
-    },
-  ],
+        {
+            name: 'meta',
+            label: 'Page Meta',
+            type: 'group',
+            fields: [
+                {
+                    name: 'title',
+                    label: 'Title',
+                    type: 'text',
+                },
+                {
+                    name: 'description',
+                    label: 'Description',
+                    type: 'textarea',
+                },
+                {
+                    name: 'keywords',
+                    label: 'Keywords',
+                    type: 'text',
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            label: 'Page Slug',
+            type: 'text',
+            admin: {
+                position: 'sidebar',
+            },
+            hooks: {
+                beforeValidate: [
+                    formatSlug('title'),
+                ],
+            },
+        },
+    ],
 };
 
 export default Page;
